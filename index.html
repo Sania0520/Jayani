@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comfort Zone 💖</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<div id="bubbles"></div>
+<body>
+  <!-- Header -->
+  <header>
+    <h1>The world behind this website solely belongs to you🫂🎀❤️✨💕</h1>
+    <p id="lyric"></p> <!-- Random lyric -->
+  </header>
+
+  <!-- Memories Section -->
+  <section class="memories">
+    <h2>Our Memories 📸</h2>
+
+    <div class="image-layout">
+      <div id="leftImages" class="left-column"></div>
+
+      <div id="centerImages" class="center-column big-image-container">
+        <!-- JS will insert Seventeen + Hoshi here -->
+      </div>
+
+      <div id="rightImages" class="right-column"></div>
+    </div>
+  </section>
+
+  <!-- Letters Section -->
+  <section class="letters">
+    <h2>Letters from us ✉️</h2>
+    <div id="friendsLinks">
+      <button onclick="showLetter('san')">To Sansssss💖</button>
+      <button onclick="showLetter('B')">To B</button>
+      <button onclick="showLetter('C')">To C</button>
+      <button onclick="showLetter('D')">To D</button>
+      <button onclick="showLetter('E')">To E</button>
+      <button onclick="showLetter('F')">To F</button>
+      <button onclick="showLetter('G')">To G</button>
+    </div>
+    <div id="letterContent"></div>
+  </section>
+
+  <!-- Comfort Mode -->
+  <button id="comfortBtn">💖 Comfort Mode</button>
+
+  <!-- Surprise Box (only Sunday) -->
+  <section id="surpriseBoxSection">
+    <h2>🎁 Surprise Box</h2>
+    <div id="surpriseBox" onclick="openSurprise()">🎁</div>
+    <p id="surpriseMessage"></p>
+  </section>
+
+  <!-- Music -->
+  <audio id="comfortMusic" src="music/if_you_leave_me.mp3" loop></audio>
+
+  <!-- JS -->
+  <script src="script.js"></script>
+</body>
+</html>

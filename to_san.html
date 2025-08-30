@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>To A 💖</title>
+  <link rel="stylesheet" href="style.css"/>
+
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script>
+    // Initialize EmailJS with your PUBLIC KEY
+    (function () {
+      emailjs.init("LpQE7uVfrME92_7-7"); // <-- replace this
+    })();
+  </script>
+</head>
+
+<body class="pastel-bg">
+  <h1>Messages to A 💌</h1>
+
+  <!-- Pictures of A (use any images you have in /images) -->
+  <div class="gallery" style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+    <img src="images/san/san1.jpg" alt="A photo 1" width="300" height="450" style="border-radius:14px;  margin-right:12px;"/>
+    <img src="images/san/san2.jpg" alt="A photo 2" width="300" height="450" style="border-radius:14px"/>
+  </div>
+
+  <!-- Random comfort lyric for A -->
+  <p id="lyric" style="margin:16px 0; font-weight:600;"></p>
+
+  <!-- A's song (use comfort.mp3 for now; replace later with A's song) -->
+  <audio id="songA" autoplay loop>
+    <source src="music/if_you_leave_me.mp3" type="audio/mpeg"/>
+  </audio>
+
+  <!-- Message form -->
+  <form id="messageForm" style="max-width:520px; margin:18px auto;">
+    <textarea id="messageInput" rows="4" placeholder="Write something for A..." style="width:100%; padding:12px; border-radius:10px;"></textarea>
+    <button type="submit" style="margin-top:10px; padding:10px 16px; border-radius:10px; background:#ff7aa2; color:#fff; border:0; cursor:pointer;">Send</button>
+  </form>
+
+  <!-- Previous messages (saved locally so she sees history) -->
+  <div id="messages" style="max-width:520px; margin:0 auto; text-align:left;"></div>
+
+  <script>
+    // ---------- Page data ----------
+    const FROM_NAME = "Jayani"; // who the email appears from
+    const RECIPIENT_EMAIL = "saniajesline667@gmail.com"; // <-- replace with Friend A's email
+    const SERVICE_ID = "service_6bm5zo8";
+    const TEMPLATE_ID = "template_yblrgsm";
+
+    // Random lyric for A
+    const lyricsA = [
+      "You're my comfort, my home 🎶",
+      "Even in the darkest night, you shine 🌙",
+      "With you, every day feels light 💫"
+    ];
+    document.getElementById("lyric").innerText =
+      lyricsA[Math.floor(Math.random() * lyricsA.length)];
+
+    // ---------- Load old messages from localStorage ----------
+    const messagesDiv = document.getElementById("messages");
+    const STORAGE_KEY = "messages_A";
+    const savedMessages = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    savedMessages.forEach(addMessageToList);
+
+    // ---------- Handle new message ----------
+    document.getElementById("messageForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const input = document.getElementById("messageInput");
+      const msg = input.value.trim();
+      if (!msg) return;
+
+      // Save locally so she sees it on the page
+      const entry = { text: msg, time: new Date().toLocaleString() };
+      savedMessages.push(entry);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(savedMessages));
+      addMessageToList(entry);
+
+      // Secretly send via EmailJS (to dynamic recipient)
+      try {
+        await emailjs.send(SERVICE_ID, TEMPLATE_ID, {
+          to_email: RECIPIENT_EMAIL, // dynamic recipient!
+          name: FROM_NAME,
+          message: msg,
+          time: entry.time
+        });
+        console.log("Secret email sent to A");
+      } catch (err) {
+        console.error("EmailJS error:", err);
+      }
+
+      // Clear input
+      input.value = "";
+    });
+
+    function addMessageToList(entry) {
+      const p = document.createElement("p");
+      p.style.background = "#fff0f6";
+      p.style.padding = "10px";
+      p.style.borderRadius = "10px";
+      p.style.margin = "8px 0";
+      p.textContent = `${entry.time} — ${entry.text}`;
+      messagesDiv.appendChild(p);
+    }
+  </script>
+</body>
+</html>

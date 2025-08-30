@@ -1,0 +1,227 @@
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  background: #f8d2e1;
+  cursor: url("https://cur.cursors-4u.net/heart/hea-1/hea50.cur"), auto;
+}
+
+header {
+  background: #efa5b0;
+  padding: 20px;
+  border-bottom: 3px solid #ff69b4;
+}
+
+h1 {
+  color: #d63384;
+}
+
+.memories {
+  margin: 20px;
+}
+
+.image-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+}
+
+.image-grid img {
+  width: 150px;
+  height: 150px;
+  border-radius: 15px;
+  object-fit: cover;
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
+}
+
+.letters {
+  margin: 30px 0;
+}
+
+.letters button {
+  margin: 5px;
+  padding: 10px;
+  border: none;
+  background: #ff99cc;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#comfortBtn {
+  margin: 20px;
+  padding: 15px 20px;
+  font-size: 18px;
+  background: #ff6699;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+#surpriseBox {
+  font-size: 50px;
+  cursor: pointer;
+}
+
+.pastel-bg {
+  background: linear-gradient(135deg, #ffdde1, #ee9ca7, #a1c4fd, #c2e9fb);
+  background-size: 400% 400%;
+  animation: gradientMove 8s ease infinite;
+}
+
+@keyframes gradientMove {
+  0% {background-position: 0% 50%;}
+  50% {background-position: 100% 50%;}
+  100% {background-position: 0% 50%;}
+}
+
+
+
+/* Bubbles container */
+#bubbles {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* so you can still click normally */
+  overflow: hidden;
+  z-index: 9999;
+}
+
+.bubble {
+  position: absolute;
+  bottom: -100px;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.9); /* light pink */
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  animation: rise 10s linear infinite;
+}
+.bubble:nth-child(1) { left: 10%; width: 20px; height: 20px; animation-delay: 0s; }
+.bubble:nth-child(2) { left: 30%; width: 25px; height: 25px; animation-delay: 3s; }
+.bubble:nth-child(3) { left: 50%; width: 15px; height: 15px; animation-delay: 6s; }
+.bubble:nth-child(4) { left: 70%; width: 30px; height: 30px; animation-delay: 9s; }
+.bubble:nth-child(5) { left: 90%; width: 22px; height: 22px; animation-delay: 12s; }
+
+/* Rising animation */
+@keyframes rise {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-120vh) scale(0.5);
+    opacity: 0;
+  }
+}
+/* .bubble:nth-child(odd) {
+  width: 40px;
+  height: 40px;
+  opacity: 0.9;
+  animation-duration: 8s;
+}
+.bubble:nth-child(even) {
+  width: 20px;
+  height: 20px;
+  opacity: 0.6;
+  animation-duration: 12s;
+} */
+
+.image-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+  justify-items: center;
+}
+
+.left-column, .right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.center-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.image-layout .center-column img {
+  
+  /* consistent height */
+  object-fit: cover;
+  border-radius: 16px;
+  margin-bottom: 20px;
+  box-shadow: 0px 6px 12px rgba(0,0,0,0.25);
+}
+.big-center {
+  width: 1000px !important;
+  height: 350px;
+  object-fit: cover;
+  border-radius: 16px;
+  margin-bottom: 20px;
+  box-shadow: 0px 6px 12px rgba(0,0,0,0.25);
+}
+/* Floating animation */
+@keyframes float {
+  0%   { transform: translateY(0px); }
+  50%  { transform: translateY(-15px); }
+  100% { transform: translateY(0px); }
+}
+
+.float-effect img {
+  animation: float 4s ease-in-out infinite;
+}
+
+.image-layout img {
+  width: 300px;         /* larger than before */
+  height: 500px;        /* fixed height for alignment */
+  border-radius: 12px;
+  object-fit: cover;    /* crop without distortion */
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease;
+}
+.image-layout img:hover {
+  transform: scale(1.05);
+}
+/* Container for Seventeen & Hoshi */
+.big-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;          /* space between images */
+  flex-wrap: wrap;    /* makes them stack on small screens */
+  margin: 30px auto;
+  max-width: 1200px;
+}
+
+/* Style for Seventeen & Hoshi images */
+/* Style for Seventeen & Hoshi images */
+.big-image-balanced {
+  flex: 1 1 48%;
+  max-width: 600px;     /* allow bigger width */
+  height: 450px;        /* taller than side images */
+  object-fit: cover;
+  border-radius: 16px;
+  display: block;
+  box-shadow: 0px 6px 12px rgba(0,0,0,0.25);
+}
+
+/* Mobile tweak */
+@media (max-width: 768px) {
+  .image-layout img {
+    width: 150px;       /* smaller on mobile */
+    height: 200px;
+  }
+
+  .big-image-balanced {
+    max-width: 90%;
+    height: auto;       /* keep aspect ratio */
+  }
+}
