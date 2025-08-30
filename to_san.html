@@ -9,47 +9,156 @@
   <!-- EmailJS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   <script>
-    // Initialize EmailJS with your PUBLIC KEY
     (function () {
-      emailjs.init("LpQE7uVfrME92_7-7"); // <-- replace this
+      emailjs.init("LpQE7uVfrME92_7-7"); // replace with your public key
     })();
   </script>
+
+  <style>
+    /* Whole wrapper */
+    /* Whole wrapper */
+.message-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px auto;
+  position: relative;
+  max-width: 100%;
+  padding: 0 10px;
+}
+
+/* ========= IMAGE SIZE SETTINGS ========= */
+.photocard {
+  width: 350px;      /* 🔹 Change desktop width */
+  height: 400px;     /* 🔹 Change desktop height */
+  border-radius: 12px;
+  object-fit: cover;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+  transform: rotate(-2deg);
+  transition: transform 0.3s ease;
+}
+
+.photocard:hover {
+  transform: scale(1.05) rotate(0deg);
+}
+
+/* Smaller image size for mobile screens */
+@media (max-width: 768px) {
+  .photocard {
+    width: 100px;   /* 🔹 Change mobile width */
+    height: 140px;  /* 🔹 Change mobile height */
+  }
+}
+
+/* Top images */
+.top-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+/* Message row with side images */
+.message-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  width: 100%;
+  max-width: 900px;
+}
+
+.side-images {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0 10px;
+  flex-shrink: 0;
+}
+
+/* Message form */
+form {
+  flex: 1;
+  max-width: 600px;   /* 🔹 Make the form wider */
+  margin: 0 30px;     /* 🔹 Adds space between form and side images */
+  z-index: 2;
+}
+
+textarea {
+  width: 500px;
+  height: 120px;      /* 🔹 Make box taller */
+  padding: 16px;
+  border-radius: 12px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  resize: vertical;   /* 🔹 Let user stretch vertically if needed */
+}
+
+button {
+  margin-top: 12px;
+  padding: 12px 24px;
+  border-radius: 12px;
+  background: #ff7aa2;
+  color: #fff;
+  border: 0;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .message-row {
+    flex-wrap: wrap;
+  }
+  .side-images {
+    flex-direction: row;
+    margin: 10px 0;
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+  </style>
 </head>
 
 <body class="pastel-bg">
-  <h1>Messages to A 💌</h1>
+  <h1>Messages to Sanss 💌</h1>
 
-  <!-- Pictures of A (use any images you have in /images) -->
-  <div class="gallery" style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
-    <img src="images/san/san1.jpg" alt="A photo 1" width="300" height="450" style="border-radius:14px;  margin-right:12px;"/>
-    <img src="images/san/san2.jpg" alt="A photo 2" width="300" height="450" style="border-radius:14px"/>
+  <div class="message-wrapper">
+    <!-- Top images -->
+    <div class="top-row" id="topImages"></div>
+
+    <!-- Message with side images -->
+    <div class="message-row">
+      <div class="side-images" id="leftImages"></div>
+
+      <form id="messageForm">
+        <textarea id="messageInput" rows="4" placeholder="Write something for A..."></textarea>
+        <button type="submit">Send</button>
+      </form>
+
+      <div class="side-images" id="rightImages"></div>
+    </div>
   </div>
 
-  <!-- Random comfort lyric for A -->
-  <p id="lyric" style="margin:16px 0; font-weight:600;"></p>
+  <!-- Random comfort lyric -->
+  <p id="lyric" style="margin:20px 0; font-weight:600; text-align:center;"></p>
 
-  <!-- A's song (use comfort.mp3 for now; replace later with A's song) -->
+  <!-- Song -->
   <audio id="songA" autoplay loop>
     <source src="music/if_you_leave_me.mp3" type="audio/mpeg"/>
   </audio>
 
-  <!-- Message form -->
-  <form id="messageForm" style="max-width:520px; margin:18px auto;">
-    <textarea id="messageInput" rows="4" placeholder="Write something for A..." style="width:100%; padding:12px; border-radius:10px;"></textarea>
-    <button type="submit" style="margin-top:10px; padding:10px 16px; border-radius:10px; background:#ff7aa2; color:#fff; border:0; cursor:pointer;">Send</button>
-  </form>
-
-  <!-- Previous messages (saved locally so she sees history) -->
+  <!-- Messages -->
   <div id="messages" style="max-width:520px; margin:0 auto; text-align:left;"></div>
 
   <script>
-    // ---------- Page data ----------
-    const FROM_NAME = "Jayani"; // who the email appears from
-    const RECIPIENT_EMAIL = "saniajesline667@gmail.com"; // <-- replace with Friend A's email
+    const FROM_NAME = "Jayani";
+    const RECIPIENT_EMAIL = "saniajesline667@gmail.com";
     const SERVICE_ID = "service_6bm5zo8";
     const TEMPLATE_ID = "template_yblrgsm";
 
-    // Random lyric for A
     const lyricsA = [
       "You're my comfort, my home 🎶",
       "Even in the darkest night, you shine 🌙",
@@ -58,39 +167,33 @@
     document.getElementById("lyric").innerText =
       lyricsA[Math.floor(Math.random() * lyricsA.length)];
 
-    // ---------- Load old messages from localStorage ----------
     const messagesDiv = document.getElementById("messages");
     const STORAGE_KEY = "messages_A";
     const savedMessages = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
     savedMessages.forEach(addMessageToList);
 
-    // ---------- Handle new message ----------
     document.getElementById("messageForm").addEventListener("submit", async (e) => {
       e.preventDefault();
       const input = document.getElementById("messageInput");
       const msg = input.value.trim();
       if (!msg) return;
 
-      // Save locally so she sees it on the page
       const entry = { text: msg, time: new Date().toLocaleString() };
       savedMessages.push(entry);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(savedMessages));
       addMessageToList(entry);
 
-      // Secretly send via EmailJS (to dynamic recipient)
       try {
         await emailjs.send(SERVICE_ID, TEMPLATE_ID, {
-          to_email: RECIPIENT_EMAIL, // dynamic recipient!
+          to_email: RECIPIENT_EMAIL,
           name: FROM_NAME,
           message: msg,
           time: entry.time
         });
-        console.log("Secret email sent to A");
       } catch (err) {
         console.error("EmailJS error:", err);
       }
 
-      // Clear input
       input.value = "";
     });
 
@@ -103,6 +206,37 @@
       p.textContent = `${entry.time} — ${entry.text}`;
       messagesDiv.appendChild(p);
     }
+
+    // ---- Random photocard images ----
+    const imageFolder = "images/san/";
+    const imageCount = 6; // total number of images
+
+    function getUniqueRandomImages(totalNeeded) {
+      const all = Array.from({ length: imageCount }, (_, i) => `${imageFolder}san${i+1}.jpg`);
+      // shuffle
+      for (let i = all.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [all[i], all[j]] = [all[j], all[i]];
+      }
+      return all.slice(0, totalNeeded);
+    }
+
+    function displayImages() {
+      const top = document.getElementById("topImages");
+      const left = document.getElementById("leftImages");
+      const right = document.getElementById("rightImages");
+
+      const chosen = getUniqueRandomImages(6); // 2 top, 2 left, 2 right
+      const topImgs = chosen.slice(0, 2);
+      const leftImgs = chosen.slice(2, 4);
+      const rightImgs = chosen.slice(4, 6);
+
+      top.innerHTML = topImgs.map(src => `<img src="${src}" class="photocard"/>`).join("");
+      left.innerHTML = leftImgs.map(src => `<img src="${src}" class="photocard"/>`).join("");
+      right.innerHTML = rightImgs.map(src => `<img src="${src}" class="photocard"/>`).join("");
+    }
+
+    displayImages();
   </script>
 </body>
 </html>
