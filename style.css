@@ -161,8 +161,8 @@ h1 {
   box-shadow: 0px 6px 12px rgba(0,0,0,0.25);
 }
 .big-center {
-  width: 1000px !important;
-  height: 350px;
+  width: 800px !important;
+  height: 400px !important;
   object-fit: cover;
   border-radius: 16px;
   margin-bottom: 20px;
@@ -181,7 +181,7 @@ h1 {
 
 .image-layout img {
   width: 300px;         /* larger than before */
-  height: 500px;        /* fixed height for alignment */
+  height: 450px;        /* fixed height for alignment */
   border-radius: 12px;
   object-fit: cover;    /* crop without distortion */
   box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
