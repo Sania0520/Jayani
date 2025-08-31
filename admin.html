@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Surprise Box Admin 🎁</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { font-family: Arial, sans-serif; padding: 16px; background: #fff7fb; }
+    .card { max-width: 520px; margin: 0 auto; background: #fff; padding: 16px; border-radius: 12px; box-shadow: 0 6px 18px rgba(0,0,0,.08); }
+    label { display: block; margin-top: 10px; font-weight: 600; }
+    input, select, textarea { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd; }
+    button { margin-top: 12px; padding: 10px 14px; border: 0; border-radius: 8px; background: #ff7aa2; color: #fff; cursor: pointer; }
+    #status { margin-top: 12px; }
+    .hidden { display: none; }
+  </style>
+
+  <!-- Firebase (compat libs for simplicity) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <!-- no firebase storage -->
+</head>
+<body>
+  <div class="card" id="loginCard">
+    <h2>Friends Login 🔐</h2>
+    <label>Email</label>
+    <input id="email" type="email" placeholder="friend@example.com" />
+    <label>Password</label>
+    <input id="password" type="password" placeholder="••••••••" />
+    <button id="loginBtn">Log in</button>
+    <p id="loginStatus"></p>
+  </div>
+
+  <div class="card hidden" id="uploadCard">
+    <h2>Upload a Gift 🎁</h2>
+    <p id="whoami" style="font-size: 14px; color:#666;"></p>
+
+    <label>From (your name)</label>
+    <input id="fromName" placeholder="e.g., Afsu" />
+
+    <label>Gift Type</label>
+    <select id="giftType">
+      <option value="message">Message</option>
+      <option value="quote">Quote</option>
+      <option value="image">Image</option>
+      <option value="video">Video</option>
+      <option value="audio">Audio</option>
+      <option value="link">Link</option>
+    </select>
+
+    <div id="textWrap">
+      <label>Text</label>
+      <textarea id="giftText" rows="4" placeholder="Write your message or quote..."></textarea>
+    </div>
+
+    <div id="fileWrap" class="hidden">
+      <label>File (will be uploaded automatically)</label>
+      <input id="giftFile" type="file" accept="image/*,video/*,audio/*" />
+    </div>
+
+    <div id="linkWrap" class="hidden">
+      <label>URL</label>
+      <input id="giftLink" type="url" placeholder="https://..." />
+    </div>
+
+    <button id="uploadBtn">Upload Gift</button>
+    <button id="logoutBtn" style="background:#555;">Log out</button>
+    <div id="status"></div>
+  </div>
+
+<script>
+  // 1) Firebase config - Replace with your config from Firebase console
+  const firebaseConfig = {
+    apiKey: "AIzaSyBPxG_8RjWWACYwk68N-Z7OE9FiA1UR5Uw",
+    authDomain: "jayani-8adc3.firebaseapp.com",
+    projectId: "jayani-8adc3",
+    storageBucket: "jayani-8adc3.firebasestorage.app",
+    messagingSenderId: "617889508627",
+    appId: "1:617889508627:web:24b538fbf1ae5660a7fee6",
+    measurementId: "G-2K9G86MNZ0"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+
+  // 2) Cloudinary config - replace these
+  const cloudName = "db3qaw4pw";         // e.g. "mycloud"
+  const uploadPreset = "Surprise_gifts"; // the unsigned preset name you created
+
+  // Helpers
+  function nextSundayBounds() {
+    const now = new Date();
+    const day = now.getDay();
+    const daysUntilSunday = (7 - day) % 7;
+    const start = new Date(now);
+    start.setHours(0,0,0,0);
+    start.setDate(start.getDate() + daysUntilSunday);
+    const end = new Date(start);
+    end.setHours(23, 59, 59, 999);
+    return { start, end };
+  }
+
+  // UI toggles
+  const loginCard = document.getElementById('loginCard');
+  const uploadCard = document.getElementById('uploadCard');
+  const loginStatus = document.getElementById('loginStatus');
+  const whoami = document.getElementById('whoami');
+  const giftTypeSel = document.getElementById('giftType');
+  const textWrap = document.getElementById('textWrap');
+  const fileWrap = document.getElementById('fileWrap');
+  const linkWrap = document.getElementById('linkWrap');
+
+  giftTypeSel.addEventListener('change', () => {
+    const type = giftTypeSel.value;
+    textWrap.classList.toggle('hidden', !(type === 'message' || type === 'quote'));
+    fileWrap.classList.toggle('hidden', !(type === 'image' || type === 'video' || type === 'audio'));
+    linkWrap.classList.toggle('hidden', type !== 'link');
+  });
+
+  document.getElementById('loginBtn').addEventListener('click', async () => {
+    const email = document.getElementById('email').value.trim();
+    const pass = document.getElementById('password').value.trim();
+    loginStatus.textContent = 'Logging in...';
+    try {
+      await auth.signInWithEmailAndPassword(email, pass);
+      loginStatus.textContent = '';
+    } catch (e) {
+      loginStatus.textContent = e.message;
+    }
+  });
+
+  document.getElementById('logoutBtn').addEventListener('click', async () => {
+    await auth.signOut();
+  });
+
+  auth.onAuthStateChanged((user) => {
+    if (user) {
+      loginCard.classList.add('hidden');
+      uploadCard.classList.remove('hidden');
+      whoami.textContent = `You are logged in as: ${user.email}`;
+    } else {
+      uploadCard.classList.add('hidden');
+      loginCard.classList.remove('hidden');
+      whoami.textContent = '';
+    }
+  });
+
+  document.getElementById('uploadBtn').addEventListener('click', async () => {
+    const type = giftTypeSel.value;
+    const fromName = document.getElementById('fromName').value.trim();
+    const text = document.getElementById('giftText').value.trim();
+    const fileEl = document.getElementById('giftFile');
+    const linkUrl = document.getElementById('giftLink').value.trim();
+    const status = document.getElementById('status');
+
+    if (!fromName) { alert('Please enter your name.'); return; }
+
+    const { start, end } = nextSundayBounds();
+    const createdAt = new Date();
+
+    let url = '';
+    try {
+      status.textContent = 'Uploading...';
+
+      if (type === 'image' || type === 'video' || type === 'audio') {
+        if (!fileEl.files[0]) { alert('Please choose a file.'); status.textContent = ''; return; }
+        const file = fileEl.files[0];
+
+        // Upload to Cloudinary (unsigned)
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', uploadPreset);
+
+        const cloudUrl = `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`;
+        const res = await fetch(cloudUrl, {
+          method: 'POST',
+          body: formData
+        });
+        if (!res.ok) throw new Error('Cloudinary upload failed: ' + res.statusText);
+        const json = await res.json();
+        url = json.secure_url; // public url
+      } else if (type === 'link') {
+        if (!linkUrl) { alert('Please paste a URL.'); status.textContent = ''; return; }
+        url = linkUrl;
+      }
+
+      // Save doc in Firestore
+      await db.collection('gifts').add({
+        type, url, text, fromName,
+        createdAt: firebase.firestore.Timestamp.fromDate(createdAt),
+        unlockStart: firebase.firestore.Timestamp.fromDate(start),
+        unlockEnd: firebase.firestore.Timestamp.fromDate(end)
+      });
+
+      status.textContent = '✅ Gift uploaded for next Sunday!';
+      document.getElementById('giftText').value = '';
+      document.getElementById('giftFile').value = '';
+      document.getElementById('giftLink').value = '';
+    } catch (e) {
+      console.error(e);
+      status.textContent = '❌ Upload failed: ' + e.message;
+    }
+  });
+</script>
+</body>
+</html>

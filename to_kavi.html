@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>To Kaviii 💖</title>
+  <link rel="stylesheet" href="style.css"/>
+
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script>
+    (function () {
+      emailjs.init("LpQE7uVfrME92_7-7"); // 🔹 replace with your EmailJS Public Key
+    })();
+  </script>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+
+  <style>
+    .message-wrapper { display: flex; flex-direction: column; align-items: center; margin: 20px auto; max-width: 100%; padding: 0 10px; }
+    .photocard { width: 350px; height: 420px; border-radius: 12px; object-fit: cover; box-shadow: 0 6px 12px rgba(0,0,0,0.3); transform: rotate(-2deg); transition: transform 0.3s ease; }
+    .photocard:hover { transform: scale(1.05) rotate(0deg); }
+    @media (max-width: 768px) { .photocard { width: 100px; height: 140px; } }
+    .top-row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 20px; }
+    .message-row { display: flex; align-items: center; justify-content: center; flex-wrap: nowrap; width: 100%; max-width: 900px; }
+    .side-images { display: flex; flex-direction: column; gap: 10px; margin: 0 10px; flex-shrink: 0; }
+    form { flex: 1; max-width: 600px; margin: 0 30px; z-index: 2; }
+    textarea { width: 500px; height: 120px; padding: 16px; border-radius: 12px; font-size: 1rem; border: 1px solid #ccc; resize: vertical; }
+    button { margin-top: 12px; padding: 12px 24px; border-radius: 12px; background: #ff7aa2; color: #fff; border: 0; font-weight: bold; cursor: pointer; }
+    @media (max-width: 768px) {
+      .message-row { flex-wrap: wrap; }
+      .side-images { flex-direction: row; margin: 10px 0; justify-content: center; width: 100%; }
+    }
+  </style>
+</head>
+
+<body class="pastel-bg">
+  <h1>Messages to Kaviii 💌</h1>
+
+  <div class="message-wrapper">
+    <div class="top-row" id="topImages"></div>
+    <div class="message-row">
+      <div class="side-images" id="leftImages"></div>
+      <form id="messageForm">
+        <textarea id="messageInput" rows="4" placeholder="Write something for her....."></textarea>
+        <button type="submit">Send</button>
+      </form>
+      <div class="side-images" id="rightImages"></div>
+    </div>
+  </div>
+
+  <p id="lyric" style="margin:20px 0; font-weight:600; text-align:center;"></p>
+
+  <audio id="songA" autoplay loop>
+    <source src="music/if_you_leave_me.mp3" type="audio/mpeg"/>
+  </audio>
+
+  <div id="messages" style="max-width:520px; margin:0 auto; text-align:left;"></div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+
+    // 🔹 Firebase Config (replace with your project details)
+    const firebaseConfig = {
+      apiKey: "AIzaSyBPxG_8RjWWACYwk68N-Z7OE9FiA1UR5Uw",
+      authDomain: "jayani-8adc3.firebaseapp.com",
+      databaseURL: "https://jayani-8adc3-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "jayani-8adc3",
+      storageBucket: "jayani-8adc3.firebasestorage.app",
+      messagingSenderId: "617889508627",
+      appId: "1:617889508627:web:24b538fbf1ae5660a7fee6",
+      measurementId: "G-2K9G86MNZ0"
+
+    };
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // === CONFIG FOR THIS PAGE ===
+    const FRIEND_KEY = "Kaviii"; // 🔹 change for each friend
+    const RECIPIENT_EMAIL = "saniajesline667@gmail.com"; // 🔹 friend's email
+    const SERVICE_ID = "service_6bm5zo8"; // your EmailJS service ID
+    const TEMPLATE_ID = "template_yblrgsm"; // your EmailJS template ID
+    const FROM_NAME = "Jayani"; // sender name
+
+    const messagesRef = ref(db, FRIEND_KEY);
+
+    // Random lyric
+    const lyrics = [
+      "When you are tired you can share it with me, I'm like that too Always failed to hide what I tired to, you know it too ,We can make each other laugh, Don't feel sorry ,Don't you worry , Don't be afraid, Now stop crying, To me YOU ARE VERY PRECIOUS, For you who must have it hard today, I will tell you, THAT I AM HERE, THAT YOU ARE DONE WELL, THAT I LOVE YOU,AND I WILL HUG YOU TIGHT",
+      "When The April Shower Falls In Late Spring, Put Down Your Umbrella And Walk In The Rain. We Are Like Flowers That Bloom In May, We Go From Waiting To Beauty, They Will Bloom More And More. 🌧️🌸✨",
+      "For You Who Must Have Had It Hard Today, I Will Tell You That I Am Here, That You Have Done Well, That I Love You, And I Will Hug You Tight. 🤗❤️🌙",
+      "Look At You Comforting Others With The Words You Wish To Hear. 💌💭🌟",
+      "What's Meant For You Will Always Find Its Way Back To You. 💫🌈",
+      "It's Okay. This World Is Precious. We Are What We Are, And Precious Just As You Are Right Now. Stay Here With Me. Tomorrow I'll Live Like A Child Who Has Grown Up A Lot. We Look Alike, So Let's Be Together Just The Way You Are, Like A Grown-Up Child. 🌍🌸❤️",
+      "On My Way Home Today, I Tell Myself I Did A Good Job. It Wasn't Always Easy, But It Wasn't Bad. In This Suffocating World, I Laughed For A Moment At One Small Thing. 🏡😊🌠"
+    ];
+    document.getElementById("lyric").innerText =
+      lyrics[Math.floor(Math.random() * lyrics.length)];
+
+    const form = document.getElementById("messageForm");
+    const input = document.getElementById("messageInput");
+    const messagesDiv = document.getElementById("messages");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const msg = input.value.trim();
+      if (!msg) return;
+
+      const entry = { text: msg, time: new Date().toLocaleString() };
+
+      // 1️⃣ Save to Firebase
+      push(messagesRef, entry);
+
+      // 2️⃣ Send hidden email to the friend
+      try {
+        await emailjs.send(SERVICE_ID, TEMPLATE_ID, {
+          to_email: RECIPIENT_EMAIL,
+          name: FROM_NAME,
+          message: msg,
+          time: entry.time
+        });
+      } catch (err) {
+        console.error("EmailJS error:", err);
+      }
+
+      input.value = "";
+    });
+
+    // Load messages from Firebase
+    onChildAdded(messagesRef, (snapshot) => {
+      const entry = snapshot.val();
+      const p = document.createElement("p");
+      p.style.background = "#fff0f6";
+      p.style.padding = "10px";
+      p.style.borderRadius = "10px";
+      p.style.margin = "8px 0";
+      p.textContent = `${entry.time} — ${entry.text}`;
+      messagesDiv.appendChild(p);
+    });
+
+    // === Photocard display ===
+        // === Photocard display ===
+    const imageFolder = "images/kavi/";
+    const imageCount = 15; // adjust to your folder count
+    function getUniqueRandomImages(totalNeeded) {
+      const all = Array.from({ length: imageCount }, (_, i) => `${imageFolder}kavi${i+1}.jpg`);
+      for (let i = all.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [all[i], all[j]] = [all[j], all[i]];
+      }
+      return all.slice(0, totalNeeded);
+    }
+    function displayImages() {
+      const top = document.getElementById("topImages");
+      const left = document.getElementById("leftImages");
+      const right = document.getElementById("rightImages");
+      const chosen = getUniqueRandomImages(6);
+      top.innerHTML = chosen.slice(0,2).map(src => `<img src="${src}" class="photocard"/>`).join("");
+      left.innerHTML = chosen.slice(2,4).map(src => `<img src="${src}" class="photocard"/>`).join("");
+      right.innerHTML = chosen.slice(4,6).map(src => `<img src="${src}" class="photocard"/>`).join("");
+    }
+
+    // Initial display
+    displayImages();
+
+    // 🔁 Auto cycle every 5 seconds
+    setInterval(displayImages, 5000);
+
+  </script>
+</body>
+</html>
