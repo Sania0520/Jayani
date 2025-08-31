@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>To Ajiiii 💖</title>
+  <title>To Afsuuu 💖</title>
   <link rel="stylesheet" href="style.css"/>
 
   <!-- EmailJS SDK -->
@@ -37,7 +37,7 @@
 </head>
 
 <body class="pastel-bg">
-  <h1>A Whisper carried to Ajiiii 💌</h1>
+  <h1>A Safe Note to Afsuuu 💌</h1>
 
   <div class="message-wrapper">
     <div class="top-row" id="topImages"></div>
@@ -54,7 +54,7 @@
   <p id="lyric" style="margin:20px 0; font-weight:600; text-align:center;"></p>
 
   <audio id="songA" autoplay loop>
-    <source src="music/cheers_to_youth.mp3" type="audio/mpeg"/>
+    <source src="music/our_dawn_is_hotter_than_day.mp3" type="audio/mpeg"/>
   </audio>
 
   <div id="messages" style="max-width:520px; margin:0 auto; text-align:left;"></div>
@@ -79,8 +79,8 @@
     const db = getDatabase(app);
 
     // === CONFIG FOR THIS PAGE ===
-    const FRIEND_KEY = "Ajiiii"; // 🔹 change for each friend
-    const RECIPIENT_EMAIL = "christyajitha845@gmail.com "; // 🔹 friend's email
+    const FRIEND_KEY = "Afsuuu"; // 🔹 change for each friend
+    const RECIPIENT_EMAIL = "afsanaanis05@gmail.com "; // 🔹 friend's email
     const SERVICE_ID = "service_6bm5zo8"; // your EmailJS service ID
     const TEMPLATE_ID = "template_yblrgsm"; // your EmailJS template ID
     const FROM_NAME = "Jayani"; // sender name
@@ -143,10 +143,10 @@
 
     // === Photocard display ===
         // === Photocard display ===
-    const imageFolder = "images/aji/";
-    const imageCount = 21; // adjust to your folder count
+    const imageFolder = "images/afsu/";
+    const imageCount = 5; // adjust to your folder count
     function getUniqueRandomImages(totalNeeded) {
-      const all = Array.from({ length: imageCount }, (_, i) => `${imageFolder}aji${i+1}.jpg`);
+      const all = Array.from({ length: imageCount }, (_, i) => `${imageFolder}afsu${i+1}.jpg`);
       for (let i = all.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [all[i], all[j]] = [all[j], all[i]];

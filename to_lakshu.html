@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>To Ajiiii 💖</title>
+  <title>To Lakshuuu 💖</title>
   <link rel="stylesheet" href="style.css"/>
 
   <!-- EmailJS SDK -->
@@ -37,7 +37,7 @@
 </head>
 
 <body class="pastel-bg">
-  <h1>A Whisper carried to Ajiiii 💌</h1>
+  <h1>Little Notes for Lakshu 💌</h1>
 
   <div class="message-wrapper">
     <div class="top-row" id="topImages"></div>
@@ -54,7 +54,7 @@
   <p id="lyric" style="margin:20px 0; font-weight:600; text-align:center;"></p>
 
   <audio id="songA" autoplay loop>
-    <source src="music/cheers_to_youth.mp3" type="audio/mpeg"/>
+    <source src="music/spell.mp3" type="audio/mpeg"/>
   </audio>
 
   <div id="messages" style="max-width:520px; margin:0 auto; text-align:left;"></div>
@@ -79,8 +79,8 @@
     const db = getDatabase(app);
 
     // === CONFIG FOR THIS PAGE ===
-    const FRIEND_KEY = "Ajiiii"; // 🔹 change for each friend
-    const RECIPIENT_EMAIL = "christyajitha845@gmail.com "; // 🔹 friend's email
+    const FRIEND_KEY = "Lakshuuu"; // 🔹 change for each friend
+    const RECIPIENT_EMAIL = "lak.luna06@gmail.com "; // 🔹 friend's email
     const SERVICE_ID = "service_6bm5zo8"; // your EmailJS service ID
     const TEMPLATE_ID = "template_yblrgsm"; // your EmailJS template ID
     const FROM_NAME = "Jayani"; // sender name
@@ -89,13 +89,11 @@
 
     // Random lyric
     const lyrics = [
-      "Don't Worry, I'll be waiting here, All the time 'cause I'm your friend",
-      "When The April Shower Falls In Late Spring, Put Down Your Umbrella And Walk In The Rain. We Are Like Flowers That Bloom In May, We Go From Waiting To Beauty, They Will Bloom More And More. 🌧️🌸✨",
-      "For You Who Must Have Had It Hard Today, I Will Tell You That I Am Here, That You Have Done Well, That I Love You, And I Will Hug You Tight. 🤗❤️🌙",
-      "Look At You Comforting Others With The Words You Wish To Hear. 💌💭🌟",
-      "What's Meant For You Will Always Find Its Way Back To You. 💫🌈",
-      "It's Okay. This World Is Precious. We Are What We Are, And Precious Just As You Are Right Now. Stay Here With Me. Tomorrow I'll Live Like A Child Who Has Grown Up A Lot. We Look Alike, So Let's Be Together Just The Way You Are, Like A Grown-Up Child. 🌍🌸❤️",
-      "On My Way Home Today, I Tell Myself I Did A Good Job. It Wasn't Always Easy, But It Wasn't Bad. In This Suffocating World, I Laughed For A Moment At One Small Thing. 🏡😊🌠"
+      "When you look back , every youth is beautiful.",
+      "As long as your warm eyes and friendly smile is here by my side , that is all I need to  stand up once again.",
+      "I wanna match you to my heart when the Dawn comes like the sky and sunlight , we are resembling each other with time , in the end we will become one .",
+      "you don't have to be alone ,come back, i am ready to listen, and wherever you are, if u hear me please come back to me"
+      
     ];
     document.getElementById("lyric").innerText =
       lyrics[Math.floor(Math.random() * lyrics.length)];
@@ -143,10 +141,10 @@
 
     // === Photocard display ===
         // === Photocard display ===
-    const imageFolder = "images/aji/";
-    const imageCount = 21; // adjust to your folder count
+    const imageFolder = "images/lakshu/";
+    const imageCount = 17; // adjust to your folder count
     function getUniqueRandomImages(totalNeeded) {
-      const all = Array.from({ length: imageCount }, (_, i) => `${imageFolder}aji${i+1}.jpg`);
+      const all = Array.from({ length: imageCount }, (_, i) => `${imageFolder}lakshu${i+1}.jpg`);
       for (let i = all.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [all[i], all[j]] = [all[j], all[i]];
